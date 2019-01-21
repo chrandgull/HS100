@@ -36,6 +36,8 @@ def main():
 
     parser.add_argument('--powerondelay', help='Once device is powered on, how long to wait for it to be active. '
                                                'Default 180 seconds.', required=False, type=int)
+    parser.add_argument('--maxdowntime', help='How long can a server not respond to ping before it considered down? '
+                                               'Default 60 seconds.', required=False, type=int)
 
     args = parser.parse_args()
     if args.token:
@@ -55,6 +57,9 @@ def main():
     if args.powerondelay:
         power_on_delay = int(args.powerondelay)
 
+    if args.maxdowntime:
+        max_allowed_downtime = int(args.maxdowntime)
+
     time_since_last_seen = 0.00
     device_powered_off = False
     try_to_ping_host = True
@@ -73,6 +78,7 @@ def main():
                 time_server_has_been_down = current_time - time_since_last_seen
 
         if (time_server_has_been_down >= max_allowed_downtime) and device_powered_off is False:
+                print(str(max_allowed_downtime))
                 state = 0
                 try_to_ping_host = False
                 response = powertoggle.power_toggle(tp_link_token, device_id, state)
