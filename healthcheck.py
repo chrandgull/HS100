@@ -78,7 +78,6 @@ def main():
                 time_server_has_been_down = current_time - time_since_last_seen
 
         if (time_server_has_been_down >= max_allowed_downtime) and device_powered_off is False:
-                print(str(max_allowed_downtime))
                 state = 0
                 try_to_ping_host = False
                 response = powertoggle.power_toggle(tp_link_token, device_id, state)
